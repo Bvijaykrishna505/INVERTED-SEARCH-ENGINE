@@ -9,7 +9,7 @@ int extntion(char*filename) // Function to check file extension
     }
     else // If extension is not .txt
     {
-        printf("error:  %s It is not a .txt file\n",filename); // Print error message
+        printf(COLOR_RED "✗ ERROR:" COLOR_RESET " File " COLOR_CYAN "%s" COLOR_RESET " is not a .txt file\n",filename); // Print error message
         return FAILURE; // Return failure
     }
 }
@@ -18,7 +18,7 @@ int empty(char*filename) // Function to check if file is empty
     FILE *fp=fopen(filename,"r"); // Open file in read mode
     if(fp==NULL) // Check if file opening failed
     {
-        printf("Error opening file --> %s \n",filename); // Print error message
+        printf(COLOR_RED "✗ ERROR:" COLOR_RESET " Cannot open file " COLOR_CYAN "--> %s\n" COLOR_RESET,filename); // Print error message
         return FAILURE; // Return failure
     }
     fseek(fp,0,SEEK_END); // Move file pointer to end of file
@@ -26,7 +26,7 @@ int empty(char*filename) // Function to check if file is empty
     fclose(fp); // Close file
     if(size==0) // Check if file size is zero
     {
-        printf("No content present in the file %s\n",filename); // Print error message
+        printf(COLOR_YELLOW "⚠ WARNING:" COLOR_RESET " No content present in file " COLOR_CYAN "%s\n" COLOR_RESET,filename); // Print error message
        return FAILURE; // Return failure
     }
     return SUCCESS; // Return success if file is not empty
@@ -69,7 +69,7 @@ void print_list(Slist *head) // Function to print file list
 {
     if (head == NULL) // Check if list is empty
     {
-        printf("INFO : List is empty\n"); // Print empty list message
+        printf(COLOR_YELLOW "⚠ List is empty\n" COLOR_RESET); // Print empty list message
         return; // Return
     }
 
@@ -84,22 +84,22 @@ void print_list(Slist *head) // Function to print file list
         }
         temp = temp->link; // Move to next node
     }
-
-    printf("INFO : Files currently in the list\n"); // Print header
-    printf("      ----------------------------\n"); // Print separator
-    printf("%-4s | %-*s\n", "No.", (int)max_len, "File Name"); // Print column headers
-    printf("------+-"); // Print separator start
-    for (int i = 0; i < (int)max_len; i++) // Loop to print dashes
-    {
-        putchar('-'); // Print dash character
-    }
-    putchar('\n'); // Print newline
+    
+    // Ensure minimum width for better alignment
+    if (max_len < 8) max_len = 8; // Minimum filename column width
+    
+    printf("\n" COLOR_CYAN COLOR_BOLD "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" COLOR_RESET); // Print separator
+    printf(COLOR_CYAN COLOR_BOLD "              FILES CURRENTLY IN THE LIST\n" COLOR_RESET); // Print header
+    printf(COLOR_CYAN COLOR_BOLD "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" COLOR_RESET); // Print separator
+    printf(COLOR_YELLOW COLOR_BOLD "  No." COLOR_RESET COLOR_CYAN " │ " COLOR_RESET COLOR_GREEN COLOR_BOLD "%-*s\n" COLOR_RESET, (int)max_len, "File Name"); // Print column headers
+    printf(COLOR_CYAN "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" COLOR_RESET); // Print separator
 
     int index = 1; // Initialize index counter
     temp = head; // Start from head
     while (temp != NULL) // Traverse through list
     {
-        printf("%-4d | %-*s\n", index++, (int)max_len, temp->file); // Print file entry with index
+        printf(COLOR_YELLOW "  %-3d" COLOR_RESET COLOR_CYAN " │ " COLOR_RESET COLOR_CYAN "%-*s\n" COLOR_RESET, index++, (int)max_len, temp->file); // Print file entry with index
         temp = temp->link; // Move to next node
     }
+    printf("\n");
 }

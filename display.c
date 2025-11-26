@@ -34,19 +34,39 @@ int display_database(main_node* hash_table[]) // Function to display database co
 
     if (!has_data) // Check if database is empty
     {
-        printf("INFO : Database is empty\n"); // Print empty database message
+        printf("\n" COLOR_YELLOW COLOR_BOLD "⚠ WARNING: Database is empty!\n" COLOR_RESET); // Print empty database message
         return SUCCESS; // Return success
     }
 
-    printf("%-5s | %-*s | %-10s | %-*s | %-10s\n", "Index", (int)max_word_len, "Word",
-           "File Count", (int)max_file_len, "File Name", "Word Count"); // Print column headers
+    // Ensure minimum column widths for better formatting
+    if (max_word_len < 4) max_word_len = 4; // Set minimum word length
+    if (max_file_len < 9) max_file_len = 9; // Set minimum file length
 
-    int total_width = 5 + max_word_len + 10 + max_file_len + 10 + (4 * 3); // Calculate total table width
-    for (int i = 0; i < total_width; i++) // Loop to print separator line
-    {
-        putchar('-'); // Print dash character
-    }
-    putchar('\n'); // Print newline
+    // Define fixed column widths for proper alignment
+    int index_width = 7; // Width for Index column (to fit "  XXX")
+    int word_width = (int)max_word_len; // Width for Word column
+    int file_count_width = 12; // Width for File Count column
+    int file_name_width = (int)max_file_len; // Width for File Name column
+    int word_count_width = 12; // Width for Word Count column
+    
+    // Calculate total width for separator line
+    int total_width = index_width + 3 + word_width + 3 + file_count_width + 3 + file_name_width + 3 + word_count_width; // 3 for " │ " separators
+
+    printf("\n" COLOR_CYAN COLOR_BOLD); // Start separator
+    for (int i = 0; i < total_width; i++) printf("━"); // Print separator line matching table width
+    printf(COLOR_RESET "\n");
+    printf(COLOR_CYAN COLOR_BOLD "                              DATABASE CONTENTS\n" COLOR_RESET); // Print header
+    printf(COLOR_CYAN COLOR_BOLD); // Start separator
+    for (int i = 0; i < total_width; i++) printf("━"); // Print separator line matching table width
+    printf(COLOR_RESET "\n");
+    
+    // Print column headers with fixed widths
+    printf(COLOR_YELLOW COLOR_BOLD "%-*s" COLOR_RESET COLOR_CYAN " │ " COLOR_RESET COLOR_GREEN COLOR_BOLD "%-*s" COLOR_RESET COLOR_CYAN " │ " COLOR_RESET COLOR_MAGENTA COLOR_BOLD "%-*s" COLOR_RESET COLOR_CYAN " │ " COLOR_RESET COLOR_BLUE COLOR_BOLD "%-*s" COLOR_RESET COLOR_CYAN " │ " COLOR_RESET COLOR_WHITE COLOR_BOLD "%-*s\n" COLOR_RESET,
+           index_width, "Index", word_width, "Word", file_count_width, "File Count", file_name_width, "File Name", word_count_width, "Word Count");
+    
+    printf(COLOR_CYAN); // Start separator
+    for (int i = 0; i < total_width; i++) printf("━"); // Print separator line matching table width
+    printf(COLOR_RESET "\n");
 
     for (int i = 0; i < 27; i++) // Loop through all hash table indices
     {
@@ -60,18 +80,22 @@ int display_database(main_node* hash_table[]) // Function to display database co
             {
                 if (first_entry) // If first entry in row
                 {
-                    printf("%-5d | %-*s | %-10d | %-*s | %-10d\n",
-                           i, (int)max_word_len, tempmain->word,
-                           tempmain->file_count, (int)max_file_len,
-                           tempsub->file_name, tempsub->word_count); // Print full row with all data
+                    printf(COLOR_YELLOW "%-*d" COLOR_RESET COLOR_CYAN " │ " COLOR_RESET COLOR_GREEN "%-*s" COLOR_RESET COLOR_CYAN " │ " COLOR_RESET COLOR_MAGENTA "%-*d" COLOR_RESET COLOR_CYAN " │ " COLOR_RESET COLOR_BLUE "%-*s" COLOR_RESET COLOR_CYAN " │ " COLOR_RESET COLOR_WHITE "%-*d\n" COLOR_RESET,
+                           index_width, i, 
+                           word_width, tempmain->word,
+                           file_count_width, tempmain->file_count, 
+                           file_name_width, tempsub->file_name, 
+                           word_count_width, tempsub->word_count); // Print full row with all data
                     first_entry = 0; // Clear first entry flag
                 }
                 else // If subsequent entry in row
                 {
-                    printf("%-5s | %-*s | %-10s | %-*s | %-10d\n",
-                           "", (int)max_word_len, "",
-                           "", (int)max_file_len,
-                           tempsub->file_name, tempsub->word_count); // Print row with only file info
+                    printf("%-*s" COLOR_CYAN " │ " COLOR_RESET "%-*s" COLOR_RESET COLOR_CYAN " │ " COLOR_RESET "%-*s" COLOR_RESET COLOR_CYAN " │ " COLOR_RESET COLOR_BLUE "%-*s" COLOR_RESET COLOR_CYAN " │ " COLOR_RESET COLOR_WHITE "%-*d\n" COLOR_RESET,
+                           index_width, "", // Empty index
+                           word_width, "", // Empty word
+                           file_count_width, "", // Empty file count
+                           file_name_width, tempsub->file_name, 
+                           word_count_width, tempsub->word_count); // Print row with only file info
                 }
                 tempsub = tempsub->link; // Move to next sub node
             }

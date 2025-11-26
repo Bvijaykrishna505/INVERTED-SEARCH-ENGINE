@@ -14,7 +14,7 @@ int update_database(Slist **head, main_node *hash_table[], char *file) // Functi
     FILE *fptr = fopen(file, "r"); // Open file in read mode
     if (fptr == NULL) // Check if file opening failed
     {
-        printf("ERROR: Cannot open file %s\n", file); // Print error message
+        printf(COLOR_RED "✗ ERROR:" COLOR_RESET " Cannot open file " COLOR_CYAN "%s\n" COLOR_RESET, file); // Print error message
         return FAILURE; // Return failure
     }
 
@@ -33,7 +33,7 @@ int update_database(Slist **head, main_node *hash_table[], char *file) // Functi
     }
     if (data[0] != '#' || data[length - 1] != '#') // Check if file starts and ends with '#'
     {
-        printf("ERROR: File must start and end with '#'\n"); // Print error message
+        printf(COLOR_RED "✗ ERROR:" COLOR_RESET " File must start and end with " COLOR_YELLOW "'#'" COLOR_RESET "\n"); // Print error message
         free(data); // Free allocated memory
         return FAILURE; // Return failure
     }
@@ -144,7 +144,7 @@ int update_database(Slist **head, main_node *hash_table[], char *file) // Functi
         create_database(*head, hash_table);  // Load remaining new files into hash table
     }
 
-    printf("INFO : Data updated successfully\n"); // Print success message
+    printf(COLOR_GREEN "✓ Data updated successfully\n" COLOR_RESET); // Print success message
     return SUCCESS; // Return success
 }
 void delete_file_from_list(Slist **head, char *filename) // Function to delete file from list

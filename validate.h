@@ -10,6 +10,18 @@
 #define SUCCESS 0 // Success status code
 #define FAILURE -1 // Failure status code
 
+// ANSI Color codes for terminal output
+#define COLOR_RESET "\033[0m" // Reset color
+#define COLOR_RED "\033[1;31m" // Red color for errors
+#define COLOR_GREEN "\033[1;32m" // Green color for success
+#define COLOR_YELLOW "\033[1;33m" // Yellow color for warnings
+#define COLOR_BLUE "\033[1;34m" // Blue color for info
+#define COLOR_MAGENTA "\033[1;35m" // Magenta color
+#define COLOR_CYAN "\033[1;36m" // Cyan color for highlights
+#define COLOR_WHITE "\033[1;37m" // White color
+#define COLOR_BOLD "\033[1m" // Bold text
+#define COLOR_UNDERLINE "\033[4m" // Underline text
+
 typedef struct sub // Structure definition for sub node (stores file-specific word information)
 {
     char words[100]; // Array to store word
